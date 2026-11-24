@@ -49,6 +49,17 @@ ul.tips li{margin:6px 0}
 .reset{background:none;border:0;color:var(--accent);font-size:.9rem;text-decoration:underline;cursor:pointer;padding:0}
 footer{text-align:center;color:var(--muted);font-size:.78rem;padding:10px 16px 30px}
 .hidden{display:none}
+.stepper{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.stepper label{flex:1;font-size:1rem;font-weight:600}
+.stepper small{display:block;color:var(--muted);font-size:.76rem;font-weight:400}
+.stepctl{display:flex;align-items:center;gap:6px}
+.stepctl input{width:76px;height:48px;font-size:1.35rem;font-weight:700;text-align:center;border:2px solid var(--accent);border-radius:10px;background:#fff;color:var(--ink)}
+.stepctl input::-webkit-outer-spin-button,.stepctl input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.stepctl input{-moz-appearance:textfield;appearance:textfield}
+.stepctl input:focus{outline:3px solid #9cc3ff}
+.sbtn{width:48px;height:48px;border-radius:10px;border:1px solid var(--line);background:var(--soft);font-size:1.5rem;font-weight:700;color:var(--ink);cursor:pointer;touch-action:manipulation}
+.sbtn:active{background:#dde6f2}
+
 </style>
 </head>
 <body>
@@ -57,6 +68,33 @@ footer{text-align:center;color:var(--muted);font-size:.78rem;padding:10px 16px 3
   <p>What could a 2026 Bad Boy 4035CH cab tractor with a 66" Bercomac front snowblower earn clearing driveways this winter? Change any number and everything updates.</p>
 </header>
 <main>
+
+<section class="card" id="mainInputs">
+  <h2>Your two big numbers</h2>
+  <div class="stepper">
+    <label for="customers">Number of customers<small>Driveways on your route (0–200)</small></label>
+    <div class="stepctl">
+      <button type="button" class="sbtn" data-t="customers" data-d="-1" aria-label="Fewer customers">&minus;</button>
+      <input type="number" id="customers" min="0" max="200" step="1" inputmode="numeric" pattern="[0-9]*">
+      <button type="button" class="sbtn" data-t="customers" data-d="1" aria-label="More customers">+</button>
+    </div>
+  </div>
+  <div class="stepper">
+    <label for="pushes">Pushes per season<small>Snowfalls of 2"+ you clear (0–60)</small></label>
+    <div class="stepctl">
+      <button type="button" class="sbtn" data-t="pushes" data-d="-1" aria-label="Fewer pushes">&minus;</button>
+      <input type="number" id="pushes" min="0" max="60" step="1" inputmode="numeric" pattern="[0-9]*">
+      <button type="button" class="sbtn" data-t="pushes" data-d="1" aria-label="More pushes">+</button>
+    </div>
+  </div>
+  <p style="font-size:.82rem;color:var(--muted);margin:10px 0 6px">Or pick a winter (sets pushes):</p>
+  <div class="btns" id="scen">
+    <button class="btn" data-p="8">Light<br><small>8 pushes</small></button>
+    <button class="btn" data-p="14">Average<br><small>14 pushes</small></button>
+    <button class="btn" data-p="20">Heavy<br><small>20 pushes</small></button>
+  </div>
+  <p style="font-size:.82rem;color:var(--muted);margin:8px 0 0">A "push" = one trip around your whole route after a 2"+ snowfall.</p>
+</section>
 
 <section class="card" id="results">
   <h2>The bottom line</h2>
@@ -70,16 +108,6 @@ footer{text-align:center;color:var(--muted);font-size:.78rem;padding:10px 16px 3
 </section>
 
 <section class="card">
-  <h2>What kind of winter?</h2>
-  <div class="btns" id="scen">
-    <button class="btn" data-p="8">Light<br><small>8 pushes</small></button>
-    <button class="btn" data-p="14">Average<br><small>14 pushes</small></button>
-    <button class="btn" data-p="20">Heavy<br><small>20 pushes</small></button>
-  </div>
-  <p style="font-size:.82rem;color:var(--muted);margin:8px 0 0">A "push" = one trip around your whole route after a 2"+ snowfall.</p>
-</section>
-
-<section class="card">
   <h2>How you charge</h2>
   <div class="btns" id="mode">
     <button class="btn" data-m="seasonal">Seasonal contract</button>
@@ -89,11 +117,9 @@ footer{text-align:center;color:var(--muted);font-size:.78rem;padding:10px 16px 3
 </section>
 
 <section class="card">
-  <h2>Customers &amp; work</h2>
-  <div class="row"><label>Number of customers<small>Driveways on your route</small></label><div class="inp"><input type="number" id="customers" min="0" step="1" inputmode="numeric"></div></div>
+  <h2>Prices &amp; work</h2>
   <div class="row" id="r_seasonal"><label>Seasonal price per customer<small>Flat fee for the whole winter</small></label><div class="inp"><span>$</span><input type="number" id="seasonal" min="0" step="10" inputmode="decimal"></div></div>
   <div class="row" id="r_push"><label>Price per push<small>Charged every time you clear it</small></label><div class="inp"><span>$</span><input type="number" id="push" min="0" step="5" inputmode="decimal"></div></div>
-  <div class="row"><label>Pushes per season<small>Snowfalls of 2"+ you clear</small></label><div class="inp"><input type="number" id="pushes" min="0" step="1" inputmode="numeric"></div></div>
   <div class="row"><label>Driveways per hour<small>Includes driving between them <span class="tag">estimate</span></small></label><div class="inp"><input type="number" id="dph" min="0.5" step="0.5" inputmode="decimal"></div></div>
   <div class="row"><label>Hours available per storm<small>Before you need to be at school/work</small></label><div class="inp"><input type="number" id="hoursAvail" min="0" step="0.5" inputmode="decimal"><span>hr</span></div></div>
 </section>
@@ -208,6 +234,8 @@ footer{text-align:center;color:var(--muted);font-size:.78rem;padding:10px 16px 3
       try{location.hash.slice(1).split("&").forEach(function(kv){var p=kv.split("=");var k=decodeURIComponent(p[0]),v=decodeURIComponent(p[1]||"");if(k in DEFAULTS){s[k]=(k==="mode")?v:parseFloat(v);}});}catch(e){}
     }
     if(s.mode!=="push")s.mode="seasonal";
+    s.customers=Math.min(200,Math.max(0,Math.round(n(s.customers))));
+    s.pushes=Math.min(60,Math.max(0,Math.round(n(s.pushes))));
     return s;
   }
   function save(){
@@ -286,7 +314,14 @@ footer{text-align:center;color:var(--muted);font-size:.78rem;padding:10px 16px 3
   function fillInputs(){fields.forEach(function(f){$(f).value=state[f];});}
 
   state=load();fillInputs();
-  fields.forEach(function(f){$(f).addEventListener("input",function(e){state[f]=n(e.target.value);render();save();});});
+  var LIM={customers:[0,200],pushes:[0,60]};
+  function clampInt(f,v){var L=LIM[f];v=Math.round(n(v));return Math.min(L[1],Math.max(L[0],v));}
+  fields.forEach(function(f){$(f).addEventListener("input",function(e){
+    if(LIM[f]){ if(e.target.value==="")return; var c=clampInt(f,e.target.value); state[f]=c; if(n(e.target.value)!==c)e.target.value=c; }
+    else state[f]=n(e.target.value);
+    render();save();});});
+  Object.keys(LIM).forEach(function(f){$(f).addEventListener("blur",function(e){e.target.value=state[f];});});
+  document.querySelectorAll(".sbtn").forEach(function(b){b.addEventListener("click",function(){var f=b.dataset.t;state[f]=clampInt(f,n(state[f])+n(b.dataset.d));$(f).value=state[f];render();save();});});
   document.querySelectorAll("#mode .btn").forEach(function(b){b.addEventListener("click",function(){state.mode=b.dataset.m;render();save();});});
   document.querySelectorAll("#scen .btn").forEach(function(b){b.addEventListener("click",function(){state.pushes=n(b.dataset.p);$("pushes").value=state.pushes;render();save();});});
   $("resetBtn").addEventListener("click",function(){state=Object.assign({},DEFAULTS);fillInputs();render();save();});
