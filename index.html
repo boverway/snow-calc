@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Snow Blowing Business Calculator - Holland, MI</title>
+<meta name="description" content="Play with the numbers for a snow blowing business with a compact tractor and front snowblower in Holland, MI.">
+<style>
+:root{--bg:#0f1b2d;--card:#ffffff;--ink:#1b2430;--muted:#5f6b7a;--accent:#1f6feb;--good:#1a7f37;--bad:#cf222e;--warn:#9a6700;--line:#e3e8ef;--soft:#f3f6fa}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--soft);color:var(--ink);line-height:1.4}
+header{background:linear-gradient(160deg,#0f1b2d,#1f3b63);color:#fff;padding:22px 16px 26px}
+header h1{margin:0 0 6px;font-size:1.35rem;line-height:1.25}
+header p{margin:0;color:#c9d6e8;font-size:.95rem}
+main{max-width:720px;margin:0 auto;padding:12px}
+.card{background:var(--card);border-radius:14px;padding:14px;margin:12px 0;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.card h2{margin:0 0 10px;font-size:1.05rem}
+.big{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--soft);border-radius:10px;padding:10px}
+.stat .lbl{font-size:.78rem;color:var(--muted)}
+.stat .val{font-size:1.25rem;font-weight:700;margin-top:2px}
+.pos{color:var(--good)}.neg{color:var(--bad)}
+.warn{background:#fff8c5;border:1px solid #e6d27a;color:#5c4400;border-radius:10px;padding:10px;margin-top:10px;font-size:.92rem}
+.ok{background:#dafbe1;border:1px solid #9be0ab;color:#14532d;border-radius:10px;padding:10px;margin-top:10px;font-size:.92rem}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row label{flex:1;font-size:.93rem}
+.row small{display:block;color:var(--muted);font-size:.76rem}
+.inp{display:flex;align-items:center;gap:4px;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
+.inp span{color:var(--muted);font-size:.9rem}
+.inp input{width:84px;border:0;background:transparent;font-size:1rem;text-align:right;color:var(--ink);padding:4px 0}
+.inp input:focus{outline:none}
+.inp:focus-within{border-color:var(--accent)}
+.tag{display:inline-block;font-size:.66rem;font-weight:600;background:#fff1e5;color:#9a4b00;border-radius:6px;padding:1px 5px;margin-left:4px;vertical-align:middle}
+.tag.src{background:#ddf4ff;color:#0a4b8f}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{flex:1;min-width:90px;border:1px solid var(--line);background:var(--soft);border-radius:10px;padding:10px 8px;font-size:.92rem;font-weight:600;color:var(--ink);cursor:pointer}
+.btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.tbl{width:100%;border-collapse:collapse;font-size:.93rem}
+.tbl td{padding:6px 0;border-bottom:1px solid var(--line)}
+.tbl td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.tbl tr.tot td{font-weight:700;border-bottom:0;border-top:2px solid var(--ink)}
+details summary{cursor:pointer;font-weight:700;font-size:1.02rem}
+details ul{padding-left:18px;font-size:.9rem}
+details li{margin:6px 0}
+a{color:var(--accent)}
+ul.tips{padding-left:18px;margin:0;font-size:.93rem}
+ul.tips li{margin:6px 0}
+.reset{background:none;border:0;color:var(--accent);font-size:.9rem;text-decoration:underline;cursor:pointer;padding:0}
+footer{text-align:center;color:var(--muted);font-size:.78rem;padding:10px 16px 30px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<header>
+  <h1>Snow Blowing Business Calculator - Holland, MI</h1>
+  <p>What could a 2026 Bad Boy 4035CH cab tractor with a 66" Bercomac front snowblower earn clearing driveways this winter? Change any number and everything updates.</p>
+</header>
+<main>
+
+<section class="card" id="results">
+  <h2>The bottom line</h2>
+  <div class="big">
+    <div class="stat"><div class="lbl">Profit per season (before loan)</div><div class="val" id="o_net">–</div></div>
+    <div class="stat"><div class="lbl">Left after loan payments</div><div class="val" id="o_netAfter">–</div></div>
+    <div class="stat"><div class="lbl">Profit per hour on the seat</div><div class="val" id="o_perHr">–</div></div>
+    <div class="stat"><div class="lbl">Seasons to pay it off (cash)</div><div class="val" id="o_payback">–</div></div>
+  </div>
+  <div id="o_timeMsg"></div>
+</section>
+
+<section class="card">
+  <h2>What kind of winter?</h2>
+  <div class="btns" id="scen">
+    <button class="btn" data-p="8">Light<br><small>8 pushes</small></button>
+    <button class="btn" data-p="14">Average<br><small>14 pushes</small></button>
+    <button class="btn" data-p="20">Heavy<br><small>20 pushes</small></button>
+  </div>
+  <p style="font-size:.82rem;color:var(--muted);margin:8px 0 0">A "push" = one trip around your whole route after a 2"+ snowfall.</p>
+</section>
+
+<section class="card">
+  <h2>How you charge</h2>
+  <div class="btns" id="mode">
+    <button class="btn" data-m="seasonal">Seasonal contract</button>
+    <button class="btn" data-m="push">Per push</button>
+  </div>
+  <p style="font-size:.82rem;color:var(--muted);margin:8px 0 0" id="modeHelp"></p>
+</section>
+
+<section class="card">
+  <h2>Customers &amp; work</h2>
+  <div class="row"><label>Number of customers<small>Driveways on your route</small></label><div class="inp"><input type="number" id="customers" min="0" step="1" inputmode="numeric"></div></div>
+  <div class="row" id="r_seasonal"><label>Seasonal price per customer<small>Flat fee for the whole winter</small></label><div class="inp"><span>$</span><input type="number" id="seasonal" min="0" step="10" inputmode="decimal"></div></div>
+  <div class="row" id="r_push"><label>Price per push<small>Charged every time you clear it</small></label><div class="inp"><span>$</span><input type="number" id="push" min="0" step="5" inputmode="decimal"></div></div>
+  <div class="row"><label>Pushes per season<small>Snowfalls of 2"+ you clear</small></label><div class="inp"><input type="number" id="pushes" min="0" step="1" inputmode="numeric"></div></div>
+  <div class="row"><label>Driveways per hour<small>Includes driving between them <span class="tag">estimate</span></small></label><div class="inp"><input type="number" id="dph" min="0.5" step="0.5" inputmode="decimal"></div></div>
+  <div class="row"><label>Hours available per storm<small>Before you need to be at school/work</small></label><div class="inp"><input type="number" id="hoursAvail" min="0" step="0.5" inputmode="decimal"><span>hr</span></div></div>
+</section>
+
+<section class="card">
+  <h2>Buying the equipment</h2>
+  <div class="row"><label>Tractor + loader <span class="tag src">dealer listing</span></label><div class="inp"><span>$</span><input type="number" id="tractor" min="0" step="100" inputmode="decimal"></div></div>
+  <div class="row"><label>Snowblower <span class="tag">estimate</span><small>Dealer says "call for price"</small></label><div class="inp"><span>$</span><input type="number" id="blower" min="0" step="100" inputmode="decimal"></div></div>
+  <div class="row"><label>Freight / delivery <span class="tag">estimate</span><small>Listing is in Wisconsin</small></label><div class="inp"><span>$</span><input type="number" id="freight" min="0" step="50" inputmode="decimal"></div></div>
+  <div class="row"><label>Down payment<small>Cash you put in up front</small></label><div class="inp"><span>$</span><input type="number" id="down" min="0" step="500" inputmode="decimal"></div></div>
+  <div class="row"><label>Loan interest rate <span class="tag">estimate</span></label><div class="inp"><input type="number" id="rate" min="0" step="0.25" inputmode="decimal"><span>%</span></div></div>
+  <div class="row"><label>Loan length</label><div class="inp"><input type="number" id="term" min="1" step="12" inputmode="numeric"><span>mo</span></div></div>
+</section>
+
+<section class="card">
+  <h2>Yearly running costs</h2>
+  <div class="row"><label>Fuel burn <span class="tag">estimate</span></label><div class="inp"><input type="number" id="gph" min="0" step="0.1" inputmode="decimal"><span>gal/hr</span></div></div>
+  <div class="row"><label>Diesel price</label><div class="inp"><span>$</span><input type="number" id="diesel" min="0" step="0.05" inputmode="decimal"><span>/gal</span></div></div>
+  <div class="row"><label>Insurance per year <span class="tag">estimate</span><small>Get a real quote, this one varies a lot</small></label><div class="inp"><span>$</span><input type="number" id="ins" min="0" step="100" inputmode="decimal"></div></div>
+  <div class="row"><label>Maintenance &amp; shear pins <span class="tag">estimate</span></label><div class="inp"><span>$</span><input type="number" id="maint" min="0" step="50" inputmode="decimal"></div></div>
+  <div class="row"><label>Marketing (flyers, signs) <span class="tag">estimate</span></label><div class="inp"><span>$</span><input type="number" id="mkt" min="0" step="50" inputmode="decimal"></div></div>
+</section>
+
+<section class="card">
+  <h2>Selling it later</h2>
+  <div class="row"><label>Years you keep it</label><div class="inp"><input type="number" id="years" min="1" step="1" inputmode="numeric"><span>yrs</span></div></div>
+  <div class="row"><label>Resale value <span class="tag">estimate</span><small>% of tractor + blower price you get back</small></label><div class="inp"><input type="number" id="resale" min="0" max="100" step="5" inputmode="decimal"><span>%</span></div></div>
+  <p style="margin:10px 0 0"><button class="reset" id="resetBtn">Reset everything to the starting numbers</button></p>
+</section>
+
+<section class="card">
+  <h2>The full math</h2>
+  <table class="tbl">
+    <tr><td>Total upfront cost</td><td id="t_upfront"></td></tr>
+    <tr><td>Amount borrowed</td><td id="t_loan"></td></tr>
+    <tr><td>Loan payment per month</td><td id="t_mo"></td></tr>
+    <tr><td>Loan payments per year</td><td id="t_yr"></td></tr>
+  </table>
+  <h2 style="margin-top:16px">One season</h2>
+  <table class="tbl">
+    <tr><td>Money coming in</td><td id="t_rev"></td></tr>
+    <tr><td>&minus; Fuel <small id="t_fuelHow" style="color:var(--muted)"></small></td><td id="t_fuel"></td></tr>
+    <tr><td>&minus; Insurance</td><td id="t_ins"></td></tr>
+    <tr><td>&minus; Maintenance &amp; shear pins</td><td id="t_maint"></td></tr>
+    <tr><td>&minus; Marketing</td><td id="t_mkt"></td></tr>
+    <tr class="tot"><td>Profit before loan</td><td id="t_net"></td></tr>
+    <tr><td>&minus; Loan payments</td><td id="t_loanyr"></td></tr>
+    <tr class="tot"><td>Left after loan</td><td id="t_netAfter"></td></tr>
+  </table>
+  <h2 style="margin-top:16px">Your time</h2>
+  <table class="tbl">
+    <tr><td>Hours per storm</td><td id="t_hrsStorm"></td></tr>
+    <tr><td>Hours per season</td><td id="t_hrsSeason"></td></tr>
+    <tr><td>Most customers you can finish in time</td><td id="t_maxCust"></td></tr>
+  </table>
+  <h2 style="margin-top:16px">Over <span id="t_yrsLbl"></span></h2>
+  <table class="tbl">
+    <tr><td>Profit before loan &times; years</td><td id="t_profYrs"></td></tr>
+    <tr><td>+ Sell it for</td><td id="t_resale"></td></tr>
+    <tr><td>&minus; What you paid up front</td><td id="t_upfront2"></td></tr>
+    <tr><td>&minus; Loan interest paid</td><td id="t_int"></td></tr>
+    <tr class="tot"><td>Total you come out ahead</td><td id="t_total"></td></tr>
+  </table>
+</section>
+
+<section class="card">
+  <h2>Tips</h2>
+  <ul class="tips">
+    <li><b>Seasonal vs per push:</b> seasonal contracts pay the same no matter the snow, so they're safer in a light winter. Per push pays more in a heavy winter. Try both buttons above with a light and a heavy winter.</li>
+    <li><b>2" trigger:</b> most Holland services only come out at 2" or more. Write that into every deal so nobody expects you after a dusting.</li>
+    <li><b>Finish before school:</b> customers want out by 7–8 AM. If the calculator says your route takes longer than you have, take fewer customers or keep them close together.</li>
+    <li><b>Sell the blower:</b> unlike a plow truck, a snowblower throws the snow away, so it doesn't leave a ridge at the end of the driveway when the city plow comes by. Neighbors love that.</li>
+    <li><b>Get a real insurance quote</b> before you sign anyone up. It's the number that changes the math the most.</li>
+    <li><b>Most seasonal contracts get signed in October.</b> This late, expect more per-push and neighbor customers to start.</li>
+  </ul>
+</section>
+
+<section class="card">
+  <details>
+    <summary>Where these numbers come from</summary>
+    <ul>
+      <li><b>Snowfall:</b> Holland averages about 70" a year, about 23 days with 1"+ and about 8 days with 3"+ (NOAA 1981–2010 averages via <a href="https://www.currentresults.com/Weather/Michigan/Places/holland-snowfall-totals-snowstorm-averages.php" target="_blank" rel="noopener">Current Results</a> and <a href="https://usclimatedata.com/climate/holland/michigan/united-states/usmi0396" target="_blank" rel="noopener">US Climate Data</a>). The 14-push "average" winter is an estimate from those.</li>
+      <li><b>Local prices:</b>
+        <ul>
+          <li><a href="https://honeydid.com/services/snow_services/holland" target="_blank" rel="noopener">HoneyDid Holland</a>: $45–95 per push, $350–800 per season</li>
+          <li><a href="https://87rentals.org/plowing-services/" target="_blank" rel="noopener">87 Entertainment</a>: $50 per push or $499 per season</li>
+          <li><a href="https://cboutdoorservices.com/resources/how-much-does-snow-removal-cost/" target="_blank" rel="noopener">Christian Brothers Outdoor</a>: $50–100 per push, $350–650 per season</li>
+          <li><a href="https://princeservice.net/snow-and-ice-management" target="_blank" rel="noopener">Prince</a>: seasonal from $450</li>
+          <li>2" trigger is standard: <a href="https://www.advantagelandscape1.com/snow-removal-holland-mi" target="_blank" rel="noopener">Advantage Landscape</a></li>
+        </ul>
+      </li>
+      <li><b>Tractor price:</b> $33,610 from the dealer's Marketplace listing (tractor + loader only; the snowblower is "call for price").</li>
+      <li><b>Estimates</b> (marked <span class="tag">estimate</span>): snowblower price, freight, loan rate, fuel burn, driveways per hour, insurance, maintenance, marketing, and resale value. These are educated guesses, so change them when you get real numbers.</li>
+      <li><b>How the math works:</b> fuel = customers &divide; driveways per hour &times; pushes &times; gallons per hour &times; diesel price. Payback = upfront cost &divide; profit before loan. Total over the years = profit before loan &times; years + resale &minus; upfront cost &minus; loan interest paid while you own it.</li>
+    </ul>
+  </details>
+</section>
+
+</main>
+<footer>For planning only. Real results depend on the winter, your customers, and your actual costs.</footer>
+
+<script>
+(function(){
+  var DEFAULTS={tractor:33610,blower:5000,freight:750,down:0,rate:6,term:60,customers:25,mode:"seasonal",seasonal:500,push:50,pushes:14,dph:4,gph:1.2,diesel:3.80,ins:1500,maint:500,mkt:300,years:5,resale:65,hoursAvail:6};
+  var KEY="snow-calc-holland-v1";
+  var fields=["tractor","blower","freight","down","rate","term","customers","seasonal","push","pushes","dph","gph","diesel","ins","maint","mkt","years","resale","hoursAvail"];
+  var state={};
+  function load(){
+    var s=Object.assign({},DEFAULTS);
+    try{var ls=JSON.parse(localStorage.getItem(KEY)||"null");if(ls)Object.assign(s,ls);}catch(e){}
+    if(location.hash.length>1){
+      try{location.hash.slice(1).split("&").forEach(function(kv){var p=kv.split("=");var k=decodeURIComponent(p[0]),v=decodeURIComponent(p[1]||"");if(k in DEFAULTS){s[k]=(k==="mode")?v:parseFloat(v);}});}catch(e){}
+    }
+    if(s.mode!=="push")s.mode="seasonal";
+    return s;
+  }
+  function save(){
+    try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}
+    var h=Object.keys(state).map(function(k){return k+"="+encodeURIComponent(state[k]);}).join("&");
+    try{history.replaceState(null,"","#"+h);}catch(e){}
+  }
+  function $(id){return document.getElementById(id);}
+  function n(v){v=parseFloat(v);return isFinite(v)?v:0;}
+  function money(v){var neg=v<0;v=Math.round(Math.abs(v));return (neg?"−$":"$")+v.toLocaleString("en-US");}
+  function num(v,d){return Number(v).toLocaleString("en-US",{maximumFractionDigits:d==null?1:d,minimumFractionDigits:0});}
+  function setMoney(id,v,color){var el=$(id);el.textContent=money(v);if(color){el.classList.toggle("pos",v>0);el.classList.toggle("neg",v<0);}}
+
+  function calc(s){
+    var r={};
+    r.upfront=n(s.tractor)+n(s.blower)+n(s.freight);
+    r.loan=Math.max(0,r.upfront-n(s.down));
+    var i=n(s.rate)/100/12, N=Math.max(1,Math.round(n(s.term)));
+    r.monthly=r.loan<=0?0:(i===0?r.loan/N:r.loan*i/(1-Math.pow(1+i,-N)));
+    r.annualLoan=r.monthly*12;
+    var cust=n(s.customers), pushes=n(s.pushes), dph=Math.max(0.01,n(s.dph));
+    r.revenue=s.mode==="push"?cust*n(s.push)*pushes:cust*n(s.seasonal);
+    r.hrsStorm=cust/dph;
+    r.hrsSeason=r.hrsStorm*pushes;
+    r.fuel=r.hrsSeason*n(s.gph)*n(s.diesel);
+    r.ins=n(s.ins);r.maint=n(s.maint);r.mkt=n(s.mkt);
+    r.opCost=r.fuel+r.ins+r.maint+r.mkt;
+    r.net=r.revenue-r.opCost;
+    r.netAfter=r.net-r.annualLoan;
+    r.perHr=r.hrsSeason>0?r.net/r.hrsSeason:0;
+    r.payback=r.net>0?r.upfront/r.net:Infinity;
+    r.maxCust=Math.floor(n(s.hoursAvail)*dph+1e-9);
+    // interest paid while owned (months owned capped at loan term)
+    var years=Math.max(0,n(s.years)), mOwned=Math.min(N,Math.round(years*12)), bal=r.loan, interest=0;
+    if(r.loan>0){for(var m=0;m<mOwned;m++){var it=bal*i;interest+=it;bal-=(r.monthly-it);}}
+    r.interest=interest;
+    r.resaleVal=(n(s.tractor)+n(s.blower))*n(s.resale)/100;
+    r.profYrs=r.net*years;
+    r.total=r.profYrs+r.resaleVal-r.upfront-r.interest;
+    return r;
+  }
+
+  function render(){
+    var s=state, r=calc(s);
+    setMoney("o_net",r.net,true);
+    setMoney("o_netAfter",r.netAfter,true);
+    var ph=$("o_perHr");ph.textContent=money(r.perHr)+"/hr";ph.classList.toggle("pos",r.perHr>0);ph.classList.toggle("neg",r.perHr<0);
+    $("o_payback").textContent=isFinite(r.payback)?num(r.payback,1)+" seasons":"Never (losing money)";
+    var tm=$("o_timeMsg");
+    if(r.hrsStorm>n(s.hoursAvail)+1e-9){
+      tm.className="warn";
+      tm.innerHTML="⚠️ <b>Too many customers to finish before you need to be done.</b> Your route takes about "+num(r.hrsStorm,1)+" hours per storm, but you have "+num(n(s.hoursAvail),1)+". At "+num(n(s.dph),1)+" driveways per hour you can fit about <b>"+r.maxCust+"</b> customers.";
+    } else {
+      tm.className="ok";
+      tm.innerHTML="✅ Your route takes about "+num(r.hrsStorm,1)+" hours per storm, which fits in your "+num(n(s.hoursAvail),1)+" hours. You could handle up to about <b>"+r.maxCust+"</b> customers.";
+    }
+    setMoney("t_upfront",r.upfront);setMoney("t_loan",r.loan);
+    $("t_mo").textContent=money(r.monthly);setMoney("t_yr",r.annualLoan);
+    setMoney("t_rev",r.revenue);
+    $("t_fuelHow").textContent="("+num(r.hrsSeason,1)+" hr × "+num(n(s.gph),2)+" gal × $"+n(s.diesel).toFixed(2)+")";
+    setMoney("t_fuel",r.fuel);setMoney("t_ins",r.ins);setMoney("t_maint",r.maint);setMoney("t_mkt",r.mkt);
+    setMoney("t_net",r.net,true);setMoney("t_loanyr",r.annualLoan);setMoney("t_netAfter",r.netAfter,true);
+    $("t_hrsStorm").textContent=num(r.hrsStorm,1)+" hr";
+    $("t_hrsSeason").textContent=num(r.hrsSeason,1)+" hr";
+    $("t_maxCust").textContent=r.maxCust;
+    var y=n(s.years);$("t_yrsLbl").textContent=num(y,1)+(y===1?" year":" years");
+    setMoney("t_profYrs",r.profYrs);setMoney("t_resale",r.resaleVal);setMoney("t_upfront2",r.upfront);setMoney("t_int",r.interest);setMoney("t_total",r.total,true);
+    // toggles
+    document.querySelectorAll("#mode .btn").forEach(function(b){b.classList.toggle("on",b.dataset.m===s.mode);});
+    document.querySelectorAll("#scen .btn").forEach(function(b){b.classList.toggle("on",n(b.dataset.p)===n(s.pushes));});
+    $("r_seasonal").classList.toggle("hidden",s.mode!=="seasonal");
+    $("r_push").classList.toggle("hidden",s.mode!=="push");
+    $("modeHelp").textContent=s.mode==="seasonal"?"Each customer pays one flat price for the whole winter, no matter how much it snows.":"Each customer pays every time you clear their driveway. More snow = more money.";
+    window.__snowCalc=r;
+  }
+  function fillInputs(){fields.forEach(function(f){$(f).value=state[f];});}
+
+  state=load();fillInputs();
+  fields.forEach(function(f){$(f).addEventListener("input",function(e){state[f]=n(e.target.value);render();save();});});
+  document.querySelectorAll("#mode .btn").forEach(function(b){b.addEventListener("click",function(){state.mode=b.dataset.m;render();save();});});
+  document.querySelectorAll("#scen .btn").forEach(function(b){b.addEventListener("click",function(){state.pushes=n(b.dataset.p);$("pushes").value=state.pushes;render();save();});});
+  $("resetBtn").addEventListener("click",function(){state=Object.assign({},DEFAULTS);fillInputs();render();save();});
+  render();
+})();
+</script>
+</body>
+</html>
